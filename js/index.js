@@ -23,6 +23,7 @@ class Index extends Page {
         div.P(`
             Du kan downloade og installere koden fra GitHub:
             <a href='${url}'>${url}</a>.`);
+        div.style('max-width: 50em');
     }
 }
 

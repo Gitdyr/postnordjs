@@ -20,7 +20,7 @@ class Sender extends Page {
         this.InputField(div, 'Adresse', 'sender_address');
         this.InputField(div, 'Postnummer', 'sender_postcode');
         this.InputField(div, 'By', 'sender_city');
-        this.InputField(div, 'Landekode (f.eks. DK)', 'sender_country');
+        this.InputSelect(div, 'sender_country', this.countries, 'Land');
         this.InputField(div, 'E-mail-adresse', 'sender_email');
         this.InputField(div, 'Telefonnummer', 'sender_phone');
         this.SubmitButton(div);

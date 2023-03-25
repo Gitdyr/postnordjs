@@ -9,6 +9,7 @@ class Receiver extends Page {
     cache = {};
     delivery_parties = {};
     max_archive = 50;
+    parcel_shop = ['-- Med omdeling --', 'pdk_1'];
 
     HandlePost() {
         super.HandlePost();
@@ -17,14 +18,8 @@ class Receiver extends Page {
         }
     }
 
-    SaveLabel() {
-        // obj.SetStorage('receiver_company', '');
-        // obj.SetStorage('receiver_name', '');
-        // obj.SaveStorage();
-    }
-
     SetShopEntries(rows, obj) {
-        let parcel_shops = [['-- Med omdeling --', 'pdk_1']];
+        let parcel_shops = [obj.parcel_shop];
         if (!rows.faults &&
             rows.servicePointInformationResponse &&
             rows.servicePointInformationResponse.servicePoints
@@ -44,13 +39,7 @@ class Receiver extends Page {
             }
         }
         let div = obj.html.Div();
-        let select = obj.InputSelect(
-            div,
-            'service',
-            parcel_shops,
-            'Pakkeshop'
-        );
-        select.style('width:25em');
+        let select = obj.InputSelect(div, 'service', parcel_shops, 'Pakkeshop');
         select.id('parcel_shop');
         let node = document.getElementById('parcel_shop');
         if (node) {
@@ -66,7 +55,12 @@ class Receiver extends Page {
         if (!postcode.match(/^[0-9 ]+$/)) {
             return;
         }
-        let rest_url = 'https://api2.postnord.com/rest/';
+        let rest_url;
+        if (this.GetStorage('test_server')) {
+            rest_url = 'https://atapi2.postnord.com/rest/';
+        } else {
+            rest_url = 'https://api2.postnord.com/rest/';
+        }
         let url = rest_url;
         url += 'businesslocation/v5/servicepoints/nearest/byaddress';
         url += '?apikey=' + this.GetStorage('api_key');
@@ -149,6 +143,19 @@ class Receiver extends Page {
                 archive = new_archive;
             }
             obj.SetStorage('archive', archive);
+            keys = [
+                'receiver_company', 
+                'receiver_company',
+                'receiver_name',
+                'receiver_address',
+                'receiver_postcode',
+                'receiver_city',
+                'receiver_email',
+                'receiver_phone'
+            ];
+            for (let key of keys) {
+                obj.SetStorage(key, '');
+            }
             obj.SaveStorage();
 	}
     }
@@ -316,7 +323,7 @@ class Receiver extends Page {
         this.InputField(div, 'Adresse', 'receiver_address');
         this.InputField(div, 'Postnummer', 'receiver_postcode');
         this.InputField(div, 'By', 'receiver_city');
-        this.InputField(div, 'Landekode (f.eks. DK)', 'receiver_country');
+        this.InputSelect(div, 'receiver_country', this.countries, 'Land');
         this.InputField(div, 'E-mail-adresse', 'receiver_email');
         this.InputField(div, 'Telefonnummer', 'receiver_phone');
         this.SubmitButton(div);
@@ -328,14 +335,9 @@ class Receiver extends Page {
         div.H1('Pakke').class('text-center');
         this.InputField(div, 'Referencenummer', 'referenceNo');
         this.InputField(div, 'Vægt [kg]', 'weight');
-        let select = this.InputSelect(
-            div,
-            'service',
-            [],
-            'Pakkeshop'
-        );
-        select.style('width:25em');
+        let select = this.InputSelect(div, 'service', [this.parcel_shop], 'Pakkeshop');
         select.id('parcel_shop');
+        select.parent.attributes.class = ['col-sm-8'];
         let button = div.Button('Udskriv');
         button.class('btn btn-primary float-end');
         button.type('button');

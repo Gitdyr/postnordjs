@@ -17,12 +17,13 @@ class Settings extends Page {
         let div = super.Contents(body, 'Indstillinger');
         this.InputField(div, 'API-nøgle', 'api_key');
         this.InputField(div, 'Produktions&shy;kundenummer', 'customer_number');
-        this.InputSelect(
+        let select = this.InputSelect(
             div,
             'label_size',
             [['Label', 'LABEL'], ['A4', 'A4']],
             'Labeltype'
         );
+        select.parent.attributes.class = ['col-sm-3'];
         /*
         this.InputSelect(
             div,
