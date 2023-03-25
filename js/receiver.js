@@ -200,8 +200,8 @@ class Receiver extends Page {
             },
             'contact': {
                 'contactName': this.GetStorage('receiver_name'),
-                'emailAddress': this.GetStorage('receiver_email'),
-                'smsNo': this.GetStorage('receiver_phone')
+                'emailAddress': this.GetStorage('receiver_email').trim(),
+                'smsNo': this.GetStorage('receiver_phone').trim()
             }
         };
 
@@ -226,10 +226,11 @@ class Receiver extends Page {
             },
             'contact': {
                 'contactName': this.GetStorage('sender_name'),
-                'emailAddress': this.GetStorage('sender_email'),
-                'smsNo': this.GetStorage('sender_phone')
+                'emailAddress': this.GetStorage('sender_email').trim(),
+                'smsNo': this.GetStorage('sender_phone').trim()
             }
         }
+        let services = [];
         let service = this.GetStorage('service');
         if (service != 'pdk_1') {
             // Without distribution
@@ -263,6 +264,7 @@ class Receiver extends Page {
             service = {
                 'basicServiceCode': '19'  // MyPack Collect
             };
+            services.push('A7');  // Optional Service Point
         } else {
             // With distribution
             parties = {
@@ -278,6 +280,16 @@ class Receiver extends Page {
                     'basicServiceCode': '17'  // MyPack Home
                 };
             }
+        }
+
+        if (consignee['party']['contact']['emailAddress']) {
+            services.push('A4');  // Notification by e-mail
+        }
+        if (consignee['party']['contact']['smsNo']) {
+            services.push('A3');  // Notification by SMS
+        }
+        if (services.length) {
+            service['additionalServiceCode'] = services;
         }
         let items = {
             'itemIdentification': {

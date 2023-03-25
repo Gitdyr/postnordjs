@@ -362,6 +362,7 @@ class Page {
         let storage = localStorage.getItem('postnord');
         if (this.copy_storage) {
             this.storage = this.copy_storage;
+            this.SaveStorage();
         } else {
             if (storage) {
                 storage = JSON.parse(localStorage.getItem('postnord'));
