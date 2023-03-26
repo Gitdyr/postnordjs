@@ -77,10 +77,11 @@ class Receiver extends Page {
 
     PrintCallback(data, obj) {
         if (!data.labelPrintout) {
-            if (data.error.description) {
+            if (data.error && data.error.description) {
                 obj.error = data.error.status;
-            } else if (data.compositeFault && data.compositeFault.faults[0]) {
-                obj.error = data.compositeFault.faults[0].explanationText;
+            } else if (data.compositeFault && data.compositeFault.faults) {
+                let faults = data.compositeFault.faults;
+                obj.error = faults.map(x => x.explanationText).join('<br>');
             } else {
                 obj.error = 'Failed';
             }
