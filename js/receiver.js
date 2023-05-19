@@ -311,6 +311,11 @@ class Receiver extends Page {
 	    'messageFunction': 'Instruction',
 	    'language': 'DA',
 	    'updateIndicator': 'Original',
+            'application': {
+                'applicationId': 1825,
+                'name': 'GitDyr PostNord pakkeforsendelse',
+                'version': '1.0'
+            },
 	    'testIndicator': this.GetStorage('test_server') ? true : false,
             'shipment' : [
                 {
