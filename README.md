@@ -11,5 +11,9 @@ i træet med indstillinger.
 
 Diverse indstillinger og midlertidig data, gemmes lokalt i din browser.
 
+## Server
+Du kan afprøve værktøjet her:
+<a href='https://gitdyr.github.io/postnordjs/'>https://gitdyr.github.io/postnordjs/</a>
+
 ## Licens
 MIT License. Copyright (c) 2023 Kjeld Borch Egevang
